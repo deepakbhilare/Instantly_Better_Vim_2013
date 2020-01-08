@@ -1,0 +1,91 @@
+set tabstop=2
+set shiftwidth=2
+set autoindent
+set expandtab
+set nocompatible
+set backspace=start,eol,indent
+set whichwrap=b,s,[,],<,>,~
+set mouse=
+syntax on
+set hlsearch
+highlight StatusLine ctermfg=gray ctermbg=black
+highlight CursorLine ctermfg=none ctermbg=darkgray cterm=none
+highlight MatchParen ctermfg=blue ctermbg=red
+highlight Comment ctermfg=DarkGreen ctermbg=NONE
+highlight Directory ctermfg=DarkGreen ctermbg=NONE
+set laststatus=2
+"set statusline=%F%r%h%=
+set statusline=%F%r%h%=
+set number
+set incsearch
+set ignorecase
+set wildmenu wildmode=list:full
+set tags=tags
+nmap <silent> <Tab> 15<Right>
+vmap <silent> <Tab> <C-o>15<Right>
+nmap <silent> <S-Tab> 15<Left>
+vmap <silent> <S-Tab> <C-o>15<Left>
+nmap <silent> <C-n> :update<CR>:bn<CR>
+imap <silent> <C-n> <ESC>:update<CR>:bn<CR>
+vmap <silent> <C-n> <ESC>:update<CR>:bn<CR>
+cmap <silent> <C-n> <ESC>:update<CR>:bn<CR>
+imap <C-b> <ESC>:read ~/.vim/bf<CR>i
+nmap <C-b> :read ~/.vim/bf<CR>
+vmap <C-b> :w!~/.vim/bf<CR>
+map <F4> :n 
+map <F3> :N 
+
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
+set rtp+=/usr/local/opt/fzf
+
+"====[ Make the 81st column stand out ]====================
+"highlight ColorColumn ctermbg=magenta
+"set colorcolumn=100
+
+"=====[ Highlight matches when jumping to next ]=============
+" This rewires n and N to do the highlighing...
+nnoremap <silent> n   n:call HLNext(0.4)<cr>
+nnoremap <silent> N   N:call HLNext(0.4)<cr>
+
+" OR ELSE briefly hide everything except the match...
+function! HLNext1 (blinktime)
+    highlight BlackOnBlack ctermfg=black ctermbg=black
+    let [bufnum, lnum, col, off] = getpos('.')
+    let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+    let hide_pat = '\%<'.lnum.'l.'
+            \ . '\|'
+            \ . '\%'.lnum.'l\%<'.col.'v.'
+            \ . '\|'
+            \ . '\%'.lnum.'l\%>'.(col+matchlen-1).'v.'
+            \ . '\|'
+            \ . '\%>'.lnum.'l.'
+    let ring = matchadd('BlackOnBlack', hide_pat, 101)
+    redraw
+    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+    call matchdelete(ring)
+    redraw
+endfunction
+
+function! HLNext (blinktime)
+    highlight BlackOnBlack ctermfg=white ctermbg=red
+    let [bufnum, lnum, col, off] = getpos('.')
+    let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+    let target_pat = '\c\%#\%('.@/.'\)'
+    let ring = matchadd('BlackOnBlack', target_pat, 101)
+    redraw
+    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+    call matchdelete(ring)
+    redraw
+endfunction
+
+"====[ Make SHIFT-K list diagraphs before each digraph entry ]===============
+inoremap <expr> <C-K> ShowDigraphs()
+
+function! ShowDigraphs ()
+    digraphs
+    call getchar()
+    return "\<C-K>"
+endfunction
+
+" But also consider the hudigraphs.vim and betterdigraphs.vim plugins,
+" which offer smarter and less intrusive alternatives
