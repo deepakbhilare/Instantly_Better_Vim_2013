@@ -89,3 +89,23 @@ endfunction
 
 " But also consider the hudigraphs.vim and betterdigraphs.vim plugins,
 " which offer smarter and less intrusive alternatives
+
+set statusline=
+"set statusline+=%7*\[%n]                                  "buffernr
+"set statusline+=%#PmenuSel#
+"set statusline+=%{StatuslineGit()}
+"set statusline+=%#LineNr#
+set statusline+=\ [%n]
+set statusline+=\ %f
+"set statusline+=%m\
+set statusline+=%=
+set statusline+=%#CursorColumn#
+"set statusline+=\ %y
+"set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+"set statusline+=\[%{&fileformat}\]
+set statusline+=\ %p%%
+set statusline+=\ [%l/%L:%c]\
+"set statusline+=\
+
+"set statusline=%<%f%m\ \[%{&ff}:%{&fenc}:%Y]\ %{getcwd()}\ \ \[%{strftime('%Y/%b/%d\ %a\ %I:%M\ %p')}\]\ %=\ Line:%l\/%L\ Column:%c%V\ %P
+
