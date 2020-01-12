@@ -1,0 +1,3 @@
+https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
+https://sourceware.org/gdb/wiki/PermissionsDarwin
+
