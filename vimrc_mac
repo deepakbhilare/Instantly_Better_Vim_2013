@@ -14,13 +14,12 @@ highlight MatchParen ctermfg=blue ctermbg=red
 highlight Comment ctermfg=DarkGreen ctermbg=NONE
 highlight Directory ctermfg=DarkGreen ctermbg=NONE
 set laststatus=2
-"set statusline=%F%r%h%=
 set statusline=%F%r%h%=
 set number
 set incsearch
 set ignorecase
 set wildmenu wildmode=list:full
-set tags=tags
+set tags=./tags
 nmap <silent> <Tab> 15<Right>
 vmap <silent> <Tab> <C-o>15<Right>
 nmap <silent> <S-Tab> 15<Left>
@@ -89,6 +88,16 @@ endfunction
 
 " But also consider the hudigraphs.vim and betterdigraphs.vim plugins,
 " which offer smarter and less intrusive alternatives
+nmap <F8> :TagbarToggle<CR>
+
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
 
 set statusline=
 "set statusline+=%7*\[%n]                                  "buffernr
@@ -97,15 +106,20 @@ set statusline=
 "set statusline+=%#LineNr#
 set statusline+=\ [%n]
 set statusline+=\ %f
-"set statusline+=%m\
+set statusline+=%m
+set statusline+=%q
+"set statusline+=%#HLname#
 set statusline+=%=
 set statusline+=%#CursorColumn#
-"set statusline+=\ %y
+"set statusline+= %y
 "set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
 "set statusline+=\[%{&fileformat}\]
 set statusline+=\ %p%%
-set statusline+=\ [%l/%L:%c]\
+set statusline+=\ [%l/%L:%c]\ 
 "set statusline+=\
 
-"set statusline=%<%f%m\ \[%{&ff}:%{&fenc}:%Y]\ %{getcwd()}\ \ \[%{strftime('%Y/%b/%d\ %a\ %I:%M\ %p')}\]\ %=\ Line:%l\/%L\ Column:%c%V\ %P
+set showcmd
 
+"set statusline=%<%f%m\ \[%{&ff}:%{&fenc}:%Y]\ %{getcwd()}\ \ \[%{strftime('%Y/%b/%d\ %a\ %I:%M\ %p')}\]\ %=\ Line:%l\/%L\ Column:%c%V\ %P
+set signcolumn=auto
+set thesaurus=/Users/deepakbhilare/.vim/thesaurus/thesaurus.txt
