@@ -1,0 +1,48 @@
+4. Examples                                             *popup-examples*
+
+TODO: more interesting examples
+                                        *popup_dialog-example*
+Prompt the user to press y/Y or n/N: >
+
+        func MyDialogHandler(id, result)
+           if a:result
+              " ... 'y' or 'Y' was pressed
+           endif
+        endfunc
+
+        call popup_dialog('Continue? y/n', #{
+                \ filter: 'popup_filter_yesno',
+                \ callback: 'MyDialogHandler',
+                \ })
+<
+                                        *popup_menu-shortcut-example*
+Extend popup_filter_menu() with shortcut keys: >
+
+        call popup_menu(['Save', 'Cancel', 'Discard'], #{
+                \ filter: 'MyMenuFilter',
+Extend popup_filter_menu() with shortcut keys: >
+
+        call popup_menu(['Save', 'Cancel', 'Discard'], #{
+                \ filter: 'MyMenuFilter',
+                \ callback: 'MyMenuHandler',
+                \ })
+
+        func MyMenuFilter(id, key)
+          " Handle shortcuts
+          if a:key == 'S'
+             call popup_close(a:id, 1)
+             return 1
+          endif
+          if a:key == 'C'
+             call popup_close(a:id, 2)
+             return 1
+          endif
+          if a:key == 'D'
+             call popup_close(a:id, 3)
+          return 1
+          endif
+
+          " No shortcut, pass to generic filter
+          return popup_filter_menu(a:id, a:key)
+        endfunc
+
